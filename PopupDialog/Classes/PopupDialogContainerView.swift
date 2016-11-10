@@ -28,12 +28,12 @@ import Foundation
 import UIKit
 
 /// The main view of the popup dialog
-final public class PopupDialogContainerView: UIView {
+open class PopupDialogContainerView: UIView {
 
     // MARK: - Appearance
 
     /// The background color of the popup dialog
-    override public dynamic var backgroundColor: UIColor? {
+    override open dynamic var backgroundColor: UIColor? {
         get { return container.backgroundColor }
         set { container.backgroundColor = newValue }
     }
