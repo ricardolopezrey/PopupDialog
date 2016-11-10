@@ -64,6 +64,8 @@ public extension PopupDialogDefaultViewController {
     // MARK: - Setter / Getter
 
     // MARK: Content
+    
+
 
     /// The dialog image
     public var image: UIImage? {
@@ -84,12 +86,31 @@ public extension PopupDialogDefaultViewController {
             standardView.pv_layoutIfNeededAnimated()
         }
     }
+    
+    /// The title text of the dialog
+    public var titleTextAttributed : NSAttributedString? {
+        get { return standardView.titleLabel.attributedText }
+        set {
+            standardView.titleLabel.attributedText = newValue
+            //standardView.titleLabel.hidden = newValue != nil ? false : true
+            standardView.pv_layoutIfNeededAnimated()
+        }
+    }
 
     /// The message text of the dialog
     public var messageText: String? {
         get { return standardView.messageLabel.text }
         set {
             standardView.messageLabel.text = newValue
+            //standardView.messageLabel.hidden = newValue != nil ? false : true
+            standardView.pv_layoutIfNeededAnimated()
+        }
+    }
+    
+    public var messageTextAttributed : NSAttributedString? {
+        get { return standardView.messageLabel.attributedText }
+        set {
+            standardView.messageLabel.attributedText = newValue
             //standardView.messageLabel.hidden = newValue != nil ? false : true
             standardView.pv_layoutIfNeededAnimated()
         }

@@ -30,6 +30,23 @@ import UIKit
 /// The main view of the popup dialog
 open class PopupDialogContainerView: UIView {
 
+    private var leadingConstraint : NSLayoutConstraint!
+    private var trailingConstraint : NSLayoutConstraint!
+    
+    private var _padding : CGFloat = 50
+    public var padding : CGFloat {
+        get {
+            return _padding
+        }
+        set {
+            _padding = newValue
+            
+            leadingConstraint.constant = newValue
+            trailingConstraint.constant = newValue
+            self.updateConstraints()
+        }
+    }
+    
     // MARK: - Appearance
 
     /// The background color of the popup dialog
@@ -72,12 +89,12 @@ open class PopupDialogContainerView: UIView {
     internal lazy var shadowContainer: UIView = {
         let shadowContainer = UIView(frame: .zero)
         shadowContainer.translatesAutoresizingMaskIntoConstraints = false
-        shadowContainer.backgroundColor = UIColor.clear
+        shadowContainer.backgroundColor = UIColor.white
         shadowContainer.layer.shadowColor = UIColor.black.cgColor
         shadowContainer.layer.shadowRadius = 5
         shadowContainer.layer.shadowOpacity = 0.4
         shadowContainer.layer.shadowOffset = CGSize(width: 0, height: 0)
-        shadowContainer.layer.cornerRadius = 4
+        shadowContainer.layer.cornerRadius = 16
         return shadowContainer
     }()
 
@@ -94,7 +111,7 @@ open class PopupDialogContainerView: UIView {
                 _container.translatesAutoresizingMaskIntoConstraints = false
                 _container.backgroundColor = UIColor.white
                 _container.clipsToBounds = true
-                _container.layer.cornerRadius = 4
+                _container.layer.cornerRadius = 16
             }
             
             return _container
@@ -156,8 +173,28 @@ open class PopupDialogContainerView: UIView {
         let views = ["shadowContainer": shadowContainer, "container": container, "stackView": stackView]
         var constraints = [NSLayoutConstraint]()
 
+        container.backgroundColor = UIColor.clear
+        
         // Shadow container constraints
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10,==20@900)-[shadowContainer(<=340,>=300)]-(>=10,==20@900)-|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:[shadowContainer(<=340)]", options: [], metrics: nil, views: views)
+        
+        /*
+        constraints += [
+        shadowContainer.leadingAnchor.constraint(lessThanOrEqualTo: shadowContainer.superview!.leadingAnchor, constant: 10),
+        shadowContainer.trailingAnchor.constraint(lessThanOrEqualTo: shadowContainer.superview!.trailingAnchor, constant: 10)
+            ]
+        */
+        
+        leadingConstraint = shadowContainer.leadingAnchor.constraint(equalTo: shadowContainer.superview!.leadingAnchor, constant: 20)
+        leadingConstraint.priority = 900
+        
+        trailingConstraint = shadowContainer.trailingAnchor.constraint(equalTo: shadowContainer.superview!.trailingAnchor, constant: 20)
+        
+        trailingConstraint.priority = 900
+        
+        constraints += [leadingConstraint, trailingConstraint]
+        
+        
         constraints += [NSLayoutConstraint(item: shadowContainer, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)]
         centerYConstraint = NSLayoutConstraint(item: shadowContainer, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
         constraints.append(centerYConstraint!)

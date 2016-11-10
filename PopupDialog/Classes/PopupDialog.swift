@@ -60,6 +60,20 @@ open class PopupDialog: UIViewController {
     internal var keyboardHeight: CGFloat? = nil
 
     // MARK: Public
+    
+    fileprivate var _tapRecognizer : UIGestureRecognizer!
+    fileprivate var _panRecognizer : UIGestureRecognizer!
+    
+    
+    public var gestureDismissal : Bool {
+        get {
+            return _tapRecognizer.isEnabled
+        }
+        set {
+            _tapRecognizer.isEnabled = newValue
+            _panRecognizer.isEnabled = newValue
+        }
+    }
 
     /// The content view of the popup dialog
     public var viewController: UIViewController
@@ -114,6 +128,25 @@ open class PopupDialog: UIViewController {
         // Call designated initializer
         self.init(viewController: viewController, buttonAlignment: buttonAlignment, transitionStyle: transitionStyle, gestureDismissal: gestureDismissal, completion: completion)
     }
+    
+    public convenience init(
+        titleAttributed: NSAttributedString?,
+        messageAttributed: NSAttributedString?,
+        image: UIImage? = nil,
+        buttonAlignment: UILayoutConstraintAxis = .vertical,
+        transitionStyle: PopupDialogTransitionStyle = .bounceUp,
+        gestureDismissal: Bool = true,
+        completion: (() -> Void)? = nil) {
+        
+        // Create and configure the standard popup dialog view
+        let viewController = PopupDialogDefaultViewController()
+        viewController.titleTextAttributed = titleAttributed
+        viewController.messageTextAttributed = messageAttributed
+        viewController.image = image
+        
+        // Call designated initializer
+        self.init(viewController: viewController, buttonAlignment: buttonAlignment, transitionStyle: transitionStyle, gestureDismissal: gestureDismissal, completion: completion)
+    }
 
     /*!
      Creates a popup dialog containing a custom view
@@ -154,12 +187,16 @@ open class PopupDialog: UIViewController {
         popupContainerView.buttonStackView.axis = buttonAlignment
 
         // Allow for dialog dismissal on background tap and dialog pan gesture
-        if gestureDismissal {
-            let panRecognizer = UIPanGestureRecognizer(target: interactor, action: #selector(InteractiveTransition.handlePan))
-            popupContainerView.stackView.addGestureRecognizer(panRecognizer)
-            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-            popupContainerView.addGestureRecognizer(tapRecognizer)
-        }
+        //if gestureDismissal {
+        _panRecognizer = UIPanGestureRecognizer(target: interactor, action: #selector(InteractiveTransition.handlePan))
+        popupContainerView.stackView.addGestureRecognizer(_panRecognizer)
+        _tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        popupContainerView.addGestureRecognizer(_tapRecognizer)
+        
+        
+        _panRecognizer.isEnabled = gestureDismissal
+        _tapRecognizer.isEnabled = gestureDismissal
+        //}
     }
 
     // Init with coder not implemented

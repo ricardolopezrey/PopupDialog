@@ -70,34 +70,47 @@ final public class PopupDialogDefaultView: UIView {
     // MARK: - Views
 
     /// The view that will contain the image, if set
-    internal lazy var imageView: UIImageView = {
-        let imageView = UIImageView(frame: .zero)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
+    private var _imageView : UIImageView!
+    
+    public var imageView: UIImageView {
+        
+        if _imageView == nil {
+            _imageView = UIImageView(frame: .zero)
+            _imageView.translatesAutoresizingMaskIntoConstraints = false
+            _imageView.contentMode = .scaleAspectFill
+        }
+        return _imageView
+    }
 
     /// The title label of the dialog
-    internal lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel(frame: .zero)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor(white: 0.4, alpha: 1)
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        return titleLabel
-    }()
-
+    private var _titleLabel : UILabel!
+    public var titleLabel: UILabel  {
+        if _titleLabel == nil {
+            _titleLabel = UILabel(frame: .zero)
+            _titleLabel.translatesAutoresizingMaskIntoConstraints = false
+            _titleLabel.numberOfLines = 0
+            _titleLabel.textAlignment = .center
+            _titleLabel.textColor = UIColor(white: 0.4, alpha: 1)
+            _titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        }
+        return _titleLabel
+    }
+    
     /// The message label of the dialog
-    internal lazy var messageLabel: UILabel = {
-        let messageLabel = UILabel(frame: .zero)
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .center
-        messageLabel.textColor = UIColor(white: 0.6, alpha: 1)
-        messageLabel.font = UIFont.systemFont(ofSize: 14)
-        return messageLabel
-    }()
+    private var _messageLabel : UILabel!
+    
+    public var messageLabel: UILabel {
+        
+        if _messageLabel == nil {
+            _messageLabel = UILabel(frame: .zero)
+            _messageLabel.translatesAutoresizingMaskIntoConstraints = false
+            _messageLabel.numberOfLines = 0
+            _messageLabel.textAlignment = .center
+            _messageLabel.textColor = UIColor(white: 0.6, alpha: 1)
+            _messageLabel.font = UIFont.systemFont(ofSize: 14)
+        }
+        return _messageLabel
+    }
 
     // MARK: - Initializers
 
@@ -117,6 +130,7 @@ final public class PopupDialogDefaultView: UIView {
         // Self setup
         translatesAutoresizingMaskIntoConstraints = false
 
+        self.backgroundColor = UIColor.clear
         // Add views
         addSubview(imageView)
         addSubview(titleLabel)
