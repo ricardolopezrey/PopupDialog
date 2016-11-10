@@ -83,14 +83,23 @@ final public class PopupDialogContainerView: UIView {
 
     /// The container view is a child of shadowContainer and contains
     /// all other views. It clips to bounds so cornerRadius can be set
-    internal lazy var container: UIView = {
-        let container = UIView(frame: .zero)
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.backgroundColor = UIColor.white
-        container.clipsToBounds = true
-        container.layer.cornerRadius = 4
-        return container
-    }()
+    
+    private var _container : UIView!
+    
+    var container: UIView {
+        
+        get{
+            if _container == nil {
+                _container = UIView(frame: .zero)
+                _container.translatesAutoresizingMaskIntoConstraints = false
+                _container.backgroundColor = UIColor.white
+                _container.clipsToBounds = true
+                _container.layer.cornerRadius = 4
+            }
+            
+            return _container
+        }
+    }
 
     // The container stack view for buttons
     internal lazy var buttonStackView: UIStackView = {
@@ -102,13 +111,21 @@ final public class PopupDialogContainerView: UIView {
     }()
 
     // The main stack view, containing all relevant views
-    internal lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.buttonStackView])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 0
-        return stackView
-    }()
+    private var _stackView : UIStackView!
+    
+    var stackView: UIStackView  {
+        get {
+            
+            if _stackView == nil {
+                _stackView = UIStackView(arrangedSubviews: [self.buttonStackView])
+                _stackView.translatesAutoresizingMaskIntoConstraints = false
+                _stackView.axis = .vertical
+                _stackView.spacing = 0
+                
+            }
+            return _stackView
+        }
+    }
 
     // MARK: - Constraints
 

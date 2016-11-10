@@ -46,7 +46,7 @@ public class PopupDialog: UIViewController {
     }()
 
     /// Returns the controllers view
-    internal var popupContainerView: PopupDialogContainerView {
+    var popupContainerView: PopupDialogContainerView {
         return view as! PopupDialogContainerView
     }
 
