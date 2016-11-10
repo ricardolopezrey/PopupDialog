@@ -46,7 +46,7 @@ open class PopupDialog: UIViewController {
     }()
 
     /// Returns the controllers view
-    var popupContainerView: PopupDialogContainerView {
+    public var popupContainerView: PopupDialogContainerView {
         return view as! PopupDialogContainerView
     }
 
@@ -69,6 +69,20 @@ open class PopupDialog: UIViewController {
 
     // MARK: - Initializers
 
+    public convenience init(
+        buttonAlignment: UILayoutConstraintAxis = .vertical,
+        transitionStyle: PopupDialogTransitionStyle = .bounceUp,
+        gestureDismissal: Bool = true,
+        completion: (() -> Void)? = nil) {
+        
+        // Create and configure the standard popup dialog view
+        let viewController = UIViewController() //PopupDialogDefaultViewController()
+
+        
+        // Call designated initializer
+        self.init(viewController: viewController, buttonAlignment: buttonAlignment, transitionStyle: transitionStyle, gestureDismissal: gestureDismissal, completion: completion)
+    }
+    
     /*!
      Creates a standard popup dialog with title, message and image field
 

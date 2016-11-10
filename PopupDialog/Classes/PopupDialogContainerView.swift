@@ -86,7 +86,7 @@ open class PopupDialogContainerView: UIView {
     
     private var _container : UIView!
     
-    var container: UIView {
+    public var container: UIView {
         
         get{
             if _container == nil {
@@ -113,7 +113,7 @@ open class PopupDialogContainerView: UIView {
     // The main stack view, containing all relevant views
     private var _stackView : UIStackView!
     
-    var stackView: UIStackView  {
+    public var stackView: UIStackView  {
         get {
             
             if _stackView == nil {

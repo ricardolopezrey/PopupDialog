@@ -26,14 +26,36 @@
 import UIKit
 
 final public class PopupDialogDefaultViewController: UIViewController {
-
+    
+    
+    public var contentView : UIView!
+    
     public var standardView: PopupDialogDefaultView {
        return view as! PopupDialogDefaultView
     }
-
+    
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public init(content : UIView) {
+        super.init(nibName: nil, bundle: nil)
+        self.contentView = content
+        view = contentView
+    }
+    
+    
     override public func loadView() {
         super.loadView()
-        view = PopupDialogDefaultView(frame: .zero)
+        
+        if contentView == nil {
+            view = PopupDialogDefaultView(frame: .zero)
+        }
     }
 }
 
