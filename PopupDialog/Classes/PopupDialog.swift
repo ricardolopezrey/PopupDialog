@@ -27,7 +27,7 @@ import Foundation
 import UIKit
 
 /// Creates a Popup dialog similar to UIAlertController
-final public class PopupDialog: UIViewController {
+public class PopupDialog: UIViewController {
 
     // MARK: Private / Internal
 
