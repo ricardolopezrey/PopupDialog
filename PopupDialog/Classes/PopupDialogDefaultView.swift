@@ -29,6 +29,7 @@ import UIKit
 /// The main view of the popup dialog
 final public class PopupDialogDefaultView: UIView {
 
+
     // MARK: - Appearance
 
     /// The font and size of the title label

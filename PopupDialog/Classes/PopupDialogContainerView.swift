@@ -33,6 +33,8 @@ open class PopupDialogContainerView: UIView {
     private var leadingConstraint : NSLayoutConstraint!
     private var trailingConstraint : NSLayoutConstraint!
     
+    private var widthConstraint : NSLayoutConstraint!
+    
     private var _padding : CGFloat = 50
     public var padding : CGFloat {
         get {
@@ -43,6 +45,7 @@ open class PopupDialogContainerView: UIView {
             
             leadingConstraint.constant = newValue
             trailingConstraint.constant = newValue
+            widthConstraint.constant = -(newValue * 2)
             self.updateConstraints()
         }
     }
@@ -178,21 +181,18 @@ open class PopupDialogContainerView: UIView {
         // Shadow container constraints
         constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:[shadowContainer(<=340)]", options: [], metrics: nil, views: views)
         
-        /*
-        constraints += [
-        shadowContainer.leadingAnchor.constraint(lessThanOrEqualTo: shadowContainer.superview!.leadingAnchor, constant: 10),
-        shadowContainer.trailingAnchor.constraint(lessThanOrEqualTo: shadowContainer.superview!.trailingAnchor, constant: 10)
-            ]
-        */
+        widthConstraint = shadowContainer.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 1, constant: -(padding*2))
+        
+        widthConstraint.priority = 900
         
         leadingConstraint = shadowContainer.leadingAnchor.constraint(equalTo: shadowContainer.superview!.leadingAnchor, constant: 20)
-        leadingConstraint.priority = 900
+        leadingConstraint.priority = 800
         
         trailingConstraint = shadowContainer.trailingAnchor.constraint(equalTo: shadowContainer.superview!.trailingAnchor, constant: 20)
         
-        trailingConstraint.priority = 900
+        trailingConstraint.priority = 800
         
-        constraints += [leadingConstraint, trailingConstraint]
+        constraints += [widthConstraint, leadingConstraint, trailingConstraint]
         
         
         constraints += [NSLayoutConstraint(item: shadowContainer, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)]

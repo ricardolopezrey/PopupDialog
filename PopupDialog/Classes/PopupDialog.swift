@@ -74,6 +74,15 @@ open class PopupDialog: UIViewController {
             _panRecognizer.isEnabled = newValue
         }
     }
+    
+    public var padding : CGFloat {
+        get {
+            return self.popupContainerView.padding
+        }
+        set {
+            self.popupContainerView.padding = newValue
+        }
+    }
 
     /// The content view of the popup dialog
     public var viewController: UIViewController
@@ -167,25 +176,53 @@ open class PopupDialog: UIViewController {
         completion: (() -> Void)? = nil) {
 
         self.viewController = viewController
-        self.completion = completion
         super.init(nibName: nil, bundle: nil)
+        
+        setup(buttonAlignment: buttonAlignment, transitionStyle: transitionStyle, gestureDismissal: gestureDismissal, completion: completion)
+        
+    }
 
+    
+    public init() {
+        
+        // Create and configure the standard popup dialog view
+        let viewController = PopupDialogDefaultViewController()
+    
+        viewController.titleText = "Not set"
+        viewController.messageText = "Not set"
+        viewController.image = nil
+        
+        self.viewController = viewController
+        
+        // Call designated initializer
+        super.init(nibName: nil, bundle: nil)
+        setup()
+    }
+    
+    // Init with coder not implemented
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    
+    private func setup(buttonAlignment: UILayoutConstraintAxis = .vertical, transitionStyle: PopupDialogTransitionStyle = .bounceUp, gestureDismissal: Bool = true, completion: (() -> Void)? = nil) {
+        
         // Init the presentation manager
         presentationManager = PresentationManager(transitionStyle: transitionStyle, interactor: interactor)
-
+        
         // Assign the interactor view controller
         interactor.viewController = self
-
+        
         // Define presentation styles
         transitioningDelegate = presentationManager
         modalPresentationStyle = .custom
-
+        
         // Add our custom view to the container
         popupContainerView.stackView.insertArrangedSubview(viewController.view, at: 0)
-
+        
         // Set button alignment
         popupContainerView.buttonStackView.axis = buttonAlignment
-
+        
         // Allow for dialog dismissal on background tap and dialog pan gesture
         //if gestureDismissal {
         _panRecognizer = UIPanGestureRecognizer(target: interactor, action: #selector(InteractiveTransition.handlePan))
@@ -196,14 +233,9 @@ open class PopupDialog: UIViewController {
         
         _panRecognizer.isEnabled = gestureDismissal
         _tapRecognizer.isEnabled = gestureDismissal
-        //}
+        
     }
-
-    // Init with coder not implemented
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    
     // MARK: - View life cycle
 
     /// Replaces controller view with popup view
@@ -308,6 +340,15 @@ open class PopupDialog: UIViewController {
 
 extension PopupDialog {
 
+    public var defaultView : PopupDialogDefaultView? {
+        
+        if let vc = viewController as? PopupDialogDefaultViewController {
+            return vc.standardView
+        }
+
+        return nil
+    }
+    
     /// The button alignment of the alert dialog
     public var buttonAlignment: UILayoutConstraintAxis {
         get { return popupContainerView.buttonStackView.axis }
